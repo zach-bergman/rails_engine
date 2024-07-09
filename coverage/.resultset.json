@@ -186,13 +186,46 @@
           null
         ]
       },
+      "/Users/luis1224/module_3/rails_engine/spec/factories/customer.rb": {
+        "lines": [
+          1,
+          1,
+          2,
+          2,
+          null,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/spec/factories/invoice_items.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/spec/factories/invoices.rb": {
+        "lines": [
+          1,
+          1,
+          2,
+          1,
+          1,
+          null,
+          null
+        ]
+      },
       "/Users/luis1224/module_3/rails_engine/spec/factories/items.rb": {
         "lines": [
           1,
           1,
-          8,
-          8,
-          8,
+          9,
+          9,
+          9,
           1,
           null,
           null
@@ -202,7 +235,7 @@
         "lines": [
           1,
           1,
-          17,
+          19,
           null,
           null
         ]
@@ -228,10 +261,8 @@
           null
         ]
       },
-      "/Users/luis1224/module_3/rails_engine/app/models/item.rb": {
+      "/Users/luis1224/module_3/rails_engine/app/models/customer.rb": {
         "lines": [
-          1,
-          1,
           1,
           1,
           1,
@@ -241,6 +272,87 @@
       },
       "/Users/luis1224/module_3/rails_engine/app/models/application_record.rb": {
         "lines": [
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/spec/models/invoice_item_spec.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          1,
+          2,
+          2,
+          null,
+          null,
+          1,
+          2,
+          2,
+          null,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/app/models/invoice_item.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/spec/models/invoice_spec.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          1,
+          2,
+          2,
+          null,
+          null,
+          1,
+          2,
+          null,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/app/models/invoice.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/spec/models/item_spec.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          1,
+          2,
+          2,
+          null,
+          null,
+          2,
+          2,
+          2,
+          2,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/app/models/item.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          1,
           1,
           1,
           null
@@ -489,6 +601,23 @@
           1,
           null,
           null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          2,
+          null,
+          null,
           null
         ]
       },
@@ -574,6 +703,12 @@
           null,
           1,
           1,
+          2,
+          1,
+          null,
+          null,
+          1,
+          1,
           5,
           null,
           null,
@@ -645,6 +780,6 @@
         ]
       }
     },
-    "timestamp": 1720490729
+    "timestamp": 1720498453
   }
 }
