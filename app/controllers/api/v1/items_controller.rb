@@ -29,10 +29,10 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def missing_attributes(execution)
-    render json: ErrorSerializer.new(ErrorMessage.new(execution.message, 400)).error, status: 400
+    render json: ErrorSerializer.new(ErrorMessage.new(execution.message, 400)).serialize_json, status: 400
   end
 
   def not_found(execution)
-    render json: ErrorSerializer.new(ErrorMessage.new(execution.message, 404)).error, status: 404
+    render json: ErrorSerializer.new(ErrorMessage.new(execution.message, 404)).serialize_json, status: 404
   end
 end
