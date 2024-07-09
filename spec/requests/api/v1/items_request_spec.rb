@@ -121,4 +121,75 @@ describe "Items API" do
       expect(data[:error].first[:message]).to eq("Validation failed: Description can't be blank")
     end
   end
+
+  describe "update item /api/v1/items/:id" do
+    it "can update an existing item (happy)" do
+      item = create(:item)
+      previuos_name = Item.last.name
+      item_params = ({
+        name: "New Item",
+        description: "New Description",
+        unit_price: 10.99,
+        merchant_id: create(:merchant).id
+      })
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: item_params)
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      updated_item = Item.find_by(id: item.id)
+
+      expect(updated_item.name).to_not eq(previuos_name)
+      expect(updated_item.name).to eq("New Item")
+    end
+
+    it "can update an existing item (sad)" do
+      item = create(:item)
+      item_params = ({
+        name: "New Item",
+        description: "",
+        unit_price: 10.99,
+        merchant_id: create(:merchant).id
+      })
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: item_params)
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+
+      data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(data[:error]).to be_a(Array)
+      expect(data[:error].first[:status]).to eq("400")
+      expect(data[:error].first[:message]).to eq("Validation failed: Description can't be blank")
+    end
+
+    it "can update an existing item (sad)" do
+      item = create(:item)
+      item_params = ({
+        name: "New Item",
+        description: "",
+        unit_price: 10.99,
+        merchant_id: create(:merchant).id
+      })
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/items/18181717181", headers: headers, params: JSON.generate(item: item_params)
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+
+      data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(data[:error]).to be_a(Array)
+      expect(data[:error].first[:status]).to eq("404")
+      expect(data[:error].first[:message]).to eq("Couldn't find Item with 'id'=18181717181")
+    end
+  end
 end
