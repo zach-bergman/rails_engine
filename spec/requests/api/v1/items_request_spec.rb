@@ -77,4 +77,48 @@ describe "Items API" do
       expect(item[:attributes][:merchant_id]).to be_an(Integer)
     end
   end
+
+  describe "create item /api/v1/items" do
+    it "can create a new item (happy)" do
+      item_params = ({
+        name: "New Item",
+        description: "New Description",
+        unit_price: 10.99,
+        merchant_id: create(:merchant).id
+      })
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+    
+      post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+      created_item = Item.last
+
+      expect(response).to be_successful
+      expect(response.status).to eq(201)
+
+      expect(created_item.name).to eq(item_params[:name])
+      expect(created_item.description).to eq(item_params[:description])
+      expect(created_item.unit_price).to eq(item_params[:unit_price])
+      expect(created_item.merchant_id).to eq(item_params[:merchant_id])
+    end
+
+    it "can create a new item (sad)" do
+      item_params = ({
+        name: "New Item",
+        unit_price: 10.99,
+        merchant_id: create(:merchant).id
+      })
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+      
+      data = JSON.parse(response.body, symbolize_names: true) 
+      expect(data[:error]).to be_a(Array)
+      expect(data[:error].first[:status]).to eq("400")
+      expect(data[:error].first[:message]).to eq("Validation failed: Description can't be blank")
+    end
+  end
 end
