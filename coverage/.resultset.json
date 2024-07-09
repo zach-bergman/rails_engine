@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/zachbergman/rails_engine/config/environment.rb": {
+      "/Users/luis1224/module_3/rails_engine/config/environment.rb": {
         "lines": [
           null,
           1,
@@ -10,7 +10,7 @@
           1
         ]
       },
-      "/Users/zachbergman/rails_engine/config/application.rb": {
+      "/Users/luis1224/module_3/rails_engine/config/application.rb": {
         "lines": [
           1,
           null,
@@ -58,7 +58,7 @@
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/config/boot.rb": {
+      "/Users/luis1224/module_3/rails_engine/config/boot.rb": {
         "lines": [
           1,
           null,
@@ -66,7 +66,7 @@
           1
         ]
       },
-      "/Users/zachbergman/rails_engine/config/environments/test.rb": {
+      "/Users/luis1224/module_3/rails_engine/config/environments/test.rb": {
         "lines": [
           1,
           null,
@@ -134,7 +134,7 @@
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/config/initializers/cors.rb": {
+      "/Users/luis1224/module_3/rails_engine/config/initializers/cors.rb": {
         "lines": [
           null,
           null,
@@ -154,7 +154,7 @@
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/config/initializers/filter_parameter_logging.rb": {
+      "/Users/luis1224/module_3/rails_engine/config/initializers/filter_parameter_logging.rb": {
         "lines": [
           null,
           null,
@@ -166,7 +166,7 @@
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/config/initializers/inflections.rb": {
+      "/Users/luis1224/module_3/rails_engine/config/initializers/inflections.rb": {
         "lines": [
           null,
           null,
@@ -186,7 +186,7 @@
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/spec/factories/items.rb": {
+      "/Users/luis1224/module_3/rails_engine/spec/factories/items.rb": {
         "lines": [
           1,
           1,
@@ -198,16 +198,16 @@
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/spec/factories/merchants.rb": {
+      "/Users/luis1224/module_3/rails_engine/spec/factories/merchants.rb": {
         "lines": [
           1,
           1,
-          9,
+          11,
           null,
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/config/routes.rb": {
+      "/Users/luis1224/module_3/rails_engine/config/routes.rb": {
         "lines": [
           1,
           null,
@@ -228,21 +228,25 @@
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/app/models/item.rb": {
+      "/Users/luis1224/module_3/rails_engine/app/models/item.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/app/models/application_record.rb": {
         "lines": [
           1,
           1,
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/app/models/application_record.rb": {
-        "lines": [
-          1,
-          1,
-          null
-        ]
-      },
-      "/Users/zachbergman/rails_engine/spec/models/merchant_spec.rb": {
+      "/Users/luis1224/module_3/rails_engine/spec/models/merchant_spec.rb": {
         "lines": [
           1,
           null,
@@ -253,14 +257,14 @@
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/app/models/merchant.rb": {
+      "/Users/luis1224/module_3/rails_engine/app/models/merchant.rb": {
         "lines": [
           1,
           1,
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/spec/requests/api/v1/items_request_spec.rb": {
+      "/Users/luis1224/module_3/rails_engine/spec/poros/error_message_spec.rb": {
         "lines": [
           1,
           null,
@@ -268,83 +272,28 @@
           1,
           1,
           1,
-          null,
           1,
           null,
           1,
           1,
-          null,
           1,
-          null,
-          1,
-          null,
-          1,
-          1,
-          null,
-          1,
-          3,
-          3,
-          null,
-          3,
-          3,
-          null,
-          3,
-          3,
-          null,
-          3,
-          3,
-          null,
-          3,
-          3,
-          null,
-          3,
-          3,
-          null,
-          3,
-          3,
-          null,
-          null,
-          null,
-          null,
-          1,
-          1,
-          1,
-          null,
-          1,
-          null,
-          1,
-          null,
-          1,
-          null,
-          1,
-          1,
-          null,
-          1,
-          1,
-          null,
-          1,
-          1,
-          null,
-          1,
-          1,
-          null,
-          1,
-          1,
-          null,
-          1,
-          1,
-          null,
-          1,
-          1,
-          null,
-          1,
-          1,
-          null,
           null,
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/spec/requests/api/v1/merchants_request_spec.rb": {
+      "/Users/luis1224/module_3/rails_engine/app/poros/error_message.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          1,
+          2,
+          2,
+          null,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/spec/requests/api/v1/items_request_spec.rb": {
         "lines": [
           1,
           null,
@@ -372,6 +321,134 @@
           3,
           3,
           null,
+          3,
+          3,
+          null,
+          3,
+          3,
+          null,
+          3,
+          3,
+          null,
+          3,
+          3,
+          null,
+          3,
+          3,
+          null,
+          null,
+          null,
+          null,
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          1,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          null,
+          null,
+          1,
+          1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/spec/requests/api/v1/merchants_request_spec.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          3,
+          3,
+          null,
+          3,
+          3,
+          null,
           null,
           null,
           null,
@@ -403,7 +480,69 @@
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/app/controllers/api/v1/items_controller.rb": {
+      "/Users/luis1224/module_3/rails_engine/app/controllers/api/v1/items_controller.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          1,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null,
+          1,
+          2,
+          null,
+          null,
+          1,
+          1,
+          2,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/app/controllers/application_controller.rb": {
+        "lines": [
+          1,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/app/serializers/item_serializer.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          1,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/app/serializers/error_serializer.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "/Users/luis1224/module_3/rails_engine/app/controllers/api/v1/merchants_controller.rb": {
         "lines": [
           1,
           1,
@@ -416,35 +555,7 @@
           null
         ]
       },
-      "/Users/zachbergman/rails_engine/app/controllers/application_controller.rb": {
-        "lines": [
-          1,
-          null
-        ]
-      },
-      "/Users/zachbergman/rails_engine/app/serializers/item_serializer.rb": {
-        "lines": [
-          1,
-          1,
-          null,
-          1,
-          null
-        ]
-      },
-      "/Users/zachbergman/rails_engine/app/controllers/api/v1/merchants_controller.rb": {
-        "lines": [
-          1,
-          1,
-          1,
-          null,
-          null,
-          1,
-          1,
-          null,
-          null
-        ]
-      },
-      "/Users/zachbergman/rails_engine/app/serializers/merchant_serializer.rb": {
+      "/Users/luis1224/module_3/rails_engine/app/serializers/merchant_serializer.rb": {
         "lines": [
           1,
           1,
@@ -454,6 +565,6 @@
         ]
       }
     },
-    "timestamp": 1720481289
+    "timestamp": 1720488530
   }
 }
