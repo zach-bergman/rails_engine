@@ -1,8 +1,8 @@
 class ErrorMessage
-  attr_reader :message, :status_code
+  attr_reader :message, :status
 
-  def initialize(message, status_code)
+  def initialize(message, status)
     @message = message
-    @status_code = status_code
+    @status = status
   end
 end

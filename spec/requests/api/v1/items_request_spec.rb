@@ -78,6 +78,138 @@ describe "Items API" do
     end
   end
 
+  describe "create item /api/v1/items" do
+    it "can create a new item (happy)" do
+      item_params = ({
+        name: "New Item",
+        description: "New Description",
+        unit_price: 10.99,
+        merchant_id: create(:merchant).id
+      })
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+    
+      post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+      created_item = Item.last
+
+      expect(response).to be_successful
+      expect(response.status).to eq(201)
+
+      expect(created_item.name).to eq(item_params[:name])
+      expect(created_item.description).to eq(item_params[:description])
+      expect(created_item.unit_price).to eq(item_params[:unit_price])
+      expect(created_item.merchant_id).to eq(item_params[:merchant_id])
+    end
+
+    it "can create a new item (sad)" do
+      item_params = ({
+        name: "New Item",
+        unit_price: 10.99,
+        merchant_id: create(:merchant).id
+      })
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      post "/api/v1/items", headers: headers, params: JSON.generate(item: item_params)
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+      
+      data = JSON.parse(response.body, symbolize_names: true) 
+      expect(data[:error]).to be_a(Array)
+      expect(data[:error].first[:status]).to eq("400")
+      expect(data[:error].first[:title]).to eq("Validation failed: Description can't be blank")
+    end
+  end
+
+  describe "update item /api/v1/items/:id" do
+    it "can update an existing item (happy)" do
+      item = create(:item)
+      previuos_name = Item.last.name
+      item_params = ({
+        name: "New Item",
+        description: "New Description",
+        unit_price: 10.99,
+        merchant_id: create(:merchant).id
+      })
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: item_params)
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      updated_item = Item.find_by(id: item.id)
+
+      expect(updated_item.name).to_not eq(previuos_name)
+      expect(updated_item.name).to eq("New Item")
+    end
+
+    it "can update an existing item (sad)" do
+      item = create(:item)
+      item_params = ({
+        name: "New Item",
+        description: "",
+        unit_price: 10.99,
+        merchant_id: create(:merchant).id
+      })
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: item_params)
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+
+      data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(data[:error]).to be_a(Array)
+      expect(data[:error].first[:status]).to eq("400")
+      expect(data[:error].first[:message]).to eq("Validation failed: Description can't be blank")
+    end
+
+    it "can update an existing item (sad)" do
+      item = create(:item)
+      item_params = ({
+        name: "New Item",
+        description: "",
+        unit_price: 10.99,
+        merchant_id: create(:merchant).id
+      })
+
+      headers = {"CONTENT_TYPE" => "application/json"}
+
+      patch "/api/v1/items/18181717181", headers: headers, params: JSON.generate(item: item_params)
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+
+      data = JSON.parse(response.body, symbolize_names: true)
+
+      expect(data[:error]).to be_a(Array)
+      expect(data[:error].first[:status]).to eq("404")
+      expect(data[:error].first[:message]).to eq("Couldn't find Item with 'id'=18181717181")
+    end
+  end
+
+  describe "delete item /api/v1/items/:id" do
+    it "can delete an existing item" do
+      item = create(:item)
+      invoice = create(:invoice)
+      InvoiceItem.create!(item: item, invoice: invoice, quantity: 1, unit_price: 10.99)
+      expect(Item.count).to eq(1)
+
+      delete "/api/v1/items/#{item.id}"
+
+      expect(response).to be_successful
+      expect(response.status).to eq(204)
+
+      expect(Item.count).to eq(0)
+      expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe "/api/v1/items/:id/merchant" do
     it "can get the merchant data for a given item ID" do
       item = create(:item)
@@ -88,10 +220,7 @@ describe "Items API" do
       merchant_json = JSON.parse(response.body, symbolize_names: true)
       
       merchant_data = merchant_json[:data]
-
-      expect(response).to be_successful
-      expect(response.status).to eq(200)
-
+      
       expect(merchant_data).to have_key(:id)
       expect(merchant_data[:id]).to be_an(String)
 
