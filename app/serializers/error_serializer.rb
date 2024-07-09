@@ -2,13 +2,13 @@ class ErrorSerializer
   def initialize(error_object)
     @error_object = error_object
   end
-
-  def error
+  
+  def serialize_json
     {
-      error: [
+      errors: [
         {
-          message: @error_object.message,
-          status: @error_object.status.to_s
+          status: @error_object.status,
+          title: @error_object.message
         }
       ]
     }

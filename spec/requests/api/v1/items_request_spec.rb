@@ -118,7 +118,7 @@ describe "Items API" do
       data = JSON.parse(response.body, symbolize_names: true) 
       expect(data[:error]).to be_a(Array)
       expect(data[:error].first[:status]).to eq("400")
-      expect(data[:error].first[:message]).to eq("Validation failed: Description can't be blank")
+      expect(data[:error].first[:title]).to eq("Validation failed: Description can't be blank")
     end
   end
 
@@ -207,6 +207,43 @@ describe "Items API" do
 
       expect(Item.count).to eq(0)
       expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
+  describe "/api/v1/items/:id/merchant" do
+    it "can get the merchant data for a given item ID" do
+      item = create(:item)
+      merchant = item.merchant
+      
+      get "/api/v1/items/#{item.id}/merchant"
+      
+      merchant_json = JSON.parse(response.body, symbolize_names: true)
+      
+      merchant_data = merchant_json[:data]
+      
+      expect(merchant_data).to have_key(:id)
+      expect(merchant_data[:id]).to be_an(String)
+
+      expect(merchant_data).to have_key(:type)
+      expect(merchant_data[:type]).to be_an(String)
+
+      expect(merchant_data).to have_key(:attributes)
+      expect(merchant_data[:attributes]).to be_a(Hash)
+      expect(merchant_data[:attributes]).to have_key(:name)
+      expect(merchant_data[:attributes][:name]).to be_a(String)
+    end
+
+    it "returns a 404 if the item does not exist" do
+      get "/api/v1/items/1/merchant"
+      
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+
+      items_json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(items_json[:errors]).to be_a(Array)
+      expect(items_json[:errors].first[:title]).to eq("Couldn't find Item with 'id'=1")
+      expect(items_json[:errors].first[:status]).to eq(404)
     end
   end
 end
