@@ -192,4 +192,21 @@ describe "Items API" do
       expect(data[:error].first[:message]).to eq("Couldn't find Item with 'id'=18181717181")
     end
   end
+
+  describe "delete item /api/v1/items/:id" do
+    it "can delete an existing item" do
+      item = create(:item)
+      invoice = create(:invoice)
+      InvoiceItem.create!(item: item, invoice: invoice, quantity: 1, unit_price: 10.99)
+      expect(Item.count).to eq(1)
+
+      delete "/api/v1/items/#{item.id}"
+
+      expect(response).to be_successful
+      expect(response.status).to eq(204)
+
+      expect(Item.count).to eq(0)
+      expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
 end
