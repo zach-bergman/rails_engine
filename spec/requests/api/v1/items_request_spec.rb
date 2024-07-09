@@ -116,9 +116,9 @@ describe "Items API" do
       expect(response.status).to eq(400)
       
       data = JSON.parse(response.body, symbolize_names: true) 
-      expect(data[:error]).to be_a(Array)
-      expect(data[:error].first[:status]).to eq("400")
-      expect(data[:error].first[:title]).to eq("Validation failed: Description can't be blank")
+      expect(data[:errors]).to be_a(Array)
+      expect(data[:errors].first[:status]).to eq(400)
+      expect(data[:errors].first[:title]).to eq("Validation failed: Description can't be blank")
     end
   end
 
@@ -164,9 +164,9 @@ describe "Items API" do
 
       data = JSON.parse(response.body, symbolize_names: true)
 
-      expect(data[:error]).to be_a(Array)
-      expect(data[:error].first[:status]).to eq("400")
-      expect(data[:error].first[:message]).to eq("Validation failed: Description can't be blank")
+      expect(data[:errors]).to be_a(Array)
+      expect(data[:errors].first[:status]).to eq(400)
+      expect(data[:errors].first[:title]).to eq("Validation failed: Description can't be blank")
     end
 
     it "can update an existing item (sad)" do
@@ -187,9 +187,9 @@ describe "Items API" do
 
       data = JSON.parse(response.body, symbolize_names: true)
 
-      expect(data[:error]).to be_a(Array)
-      expect(data[:error].first[:status]).to eq("404")
-      expect(data[:error].first[:message]).to eq("Couldn't find Item with 'id'=18181717181")
+      expect(data[:errors]).to be_a(Array)
+      expect(data[:errors].first[:status]).to eq(404)
+      expect(data[:errors].first[:title]).to eq("Couldn't find Item with 'id'=18181717181")
     end
   end
 
