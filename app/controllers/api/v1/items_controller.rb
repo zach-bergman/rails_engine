@@ -20,7 +20,7 @@ class Api::V1::ItemsController < ApplicationController
   def destroy
     @deleted_item = Item.find(params[:id])
     @deleted_item.invoice_items.each { |item| item.destroy }
-    render json: Item.delete(params[:id]), status: 204
+    render json: Item.delete(@deleted_item), status: 204
   end
 
   private
