@@ -17,6 +17,12 @@ class Api::V1::ItemsController < ApplicationController
     render json: ItemSerializer.new(Item.update!(params[:id], item_params)), status: 200
   end
 
+  def destroy
+    @deleted_item = Item.find(params[:id])
+    @deleted_item.invoice_items.each { |item| item.destroy }
+    render json: Item.delete(params[:id]), status: 204
+  end
+
   private
   def item_params
     params.require(:item).permit(:name, :description, :unit_price, :merchant_id)
