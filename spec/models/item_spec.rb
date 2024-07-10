@@ -55,5 +55,18 @@ describe Item, type: :model do
         expect(Item.find_all_by_max_price(1.00)).to eq([])
       end
     end
+
+    describe ".find_all_by_price_range" do
+      it "returns all items with a unit price within the search term range" do
+        item_1 = create(:item, unit_price: 10.99)
+        item_2 = create(:item, unit_price: 12.99)
+        item_3 = create(:item, unit_price: 14.99)
+        item_4 = create(:item, unit_price: 16.99)
+
+        expect(Item.find_all_by_price_range(10.99, 14.99)).to eq([item_1, item_2, item_3])
+        expect(Item.find_all_by_price_range(12.99, 16.99)).to eq([item_2, item_3, item_4])
+        expect(Item.find_all_by_price_range(14.99, 16.99)).to eq([item_3, item_4])
+      end
+    end
   end
 end
