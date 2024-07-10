@@ -259,4 +259,26 @@ describe "Items API" do
       expect(items_json[:errors].first[:status]).to eq(404)
     end
   end
+
+  describe "/api/v1/items/find_all" do
+    it "can find all items that match a search by name" do
+      item_1 = create(:item, name: "Red Shirt")
+      item_2 = create(:item, name: "White Shirt")
+      item_3 = create(:item, name: "Grey Pants")
+      item_4 = create(:item, name: "Black Pants")
+
+      get "/api/v1/items/find_all?name=shirt"
+      
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      items_json = JSON.parse(response.body, symbolize_names: true)[:data]
+
+      expect(items_json).to be_an(Array)
+      expect(items_json.count).to eq(2)
+
+      expect(items_json[0][:attributes][:name]).to eq(item_1.name)
+      expect(items_json[1][:attributes][:name]).to eq(item_2.name)
+    end
+  end
 end
