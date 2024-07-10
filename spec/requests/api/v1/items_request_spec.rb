@@ -76,6 +76,19 @@ describe "Items API" do
       expect(item[:attributes]).to have_key(:merchant_id)
       expect(item[:attributes][:merchant_id]).to be_an(Integer)
     end
+
+    it "(sad) - returns a 404 if the item does not exist" do
+      get "/api/v1/items/1"
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+
+      items_json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(items_json[:errors]).to be_a(Array)
+      expect(items_json[:errors].first[:title]).to eq("Couldn't find Item with 'id'=1")
+      expect(items_json[:errors].first[:status]).to eq(404)
+    end
   end
 
   describe "create item /api/v1/items" do
@@ -220,7 +233,6 @@ describe "Items API" do
       expect(data[:errors].first[:status]).to eq(404)
       expect(data[:errors].first[:title]).to eq("Couldn't find Item with 'id'=18181717181")
     end
-
   end
 
   describe "/api/v1/items/:id/merchant" do
@@ -257,6 +269,202 @@ describe "Items API" do
       expect(items_json[:errors]).to be_a(Array)
       expect(items_json[:errors].first[:title]).to eq("Couldn't find Item with 'id'=1")
       expect(items_json[:errors].first[:status]).to eq(404)
+    end
+  end
+
+  describe "/api/v1/items/find_all" do
+    it "(sad) - no params entered" do
+      get "/api/v1/items/find_all"
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(400)
+
+      items_json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(items_json[:errors]).to be_an(Array)
+      expect(items_json[:errors].first[:title]).to eq("No search parameters entered")
+      expect(items_json[:errors].first[:status]).to eq(400)
+    end
+
+    describe "can find all items that match a search by name" do
+      it "can find all items that match a search by name" do
+        item_1 = create(:item, name: "Red Shirt")
+        item_2 = create(:item, name: "White Shirt")
+        item_3 = create(:item, name: "Grey Pants")
+        item_4 = create(:item, name: "Black Pants")
+
+        get "/api/v1/items/find_all?name=shirt"
+
+        expect(response).to be_successful
+        expect(response.status).to eq(200)
+
+        items_json = JSON.parse(response.body, symbolize_names: true)[:data]
+
+        expect(items_json).to be_an(Array)
+        expect(items_json.count).to eq(2)
+
+        expect(items_json[0][:attributes][:name]).to eq(item_1.name)
+        expect(items_json[1][:attributes][:name]).to eq(item_2.name)
+      end
+
+      it "(sad) - name must be entered for search" do
+        get "/api/v1/items/find_all?name="
+
+        expect(response).to_not be_successful
+        expect(response.status).to eq(400)
+
+        items_json = JSON.parse(response.body, symbolize_names: true)
+
+        expect(items_json[:errors]).to be_an(Array)
+        expect(items_json[:errors].first[:title]).to eq("No name entered")
+        expect(items_json[:errors].first[:status]).to eq(400)
+      end
+
+      it "(sad) - cannot search by name and min_price at the same time" do
+        get "/api/v1/items/find_all?name=shirt&min_price=20"
+
+        expect(response).to_not be_successful
+        expect(response.status).to eq(400)
+
+        items_json = JSON.parse(response.body, symbolize_names: true)
+
+        expect(items_json[:errors]).to be_an(Array)
+        expect(items_json[:errors].first[:title]).to eq("Cannot search by name and price at the same time")
+        expect(items_json[:errors].first[:status]).to eq(400)
+      end
+
+      it "(sad) - cannot search by name and max_price at the same time" do
+        get "/api/v1/items/find_all?name=shirt&max_price=40"
+
+        expect(response).to_not be_successful
+        expect(response.status).to eq(400)
+
+        items_json = JSON.parse(response.body, symbolize_names: true)
+
+        expect(items_json[:errors]).to be_an(Array)
+        expect(items_json[:errors].first[:title]).to eq("Cannot search by name and price at the same time")
+        expect(items_json[:errors].first[:status]).to eq(400)
+      end
+
+      it "(sad) - cannot search by name, min_price and max_price at the same time" do
+        get "/api/v1/items/find_all?name=shirt&min_price=10&max_price=50"
+
+        expect(response).to_not be_successful
+        expect(response.status).to eq(400)
+
+        items_json = JSON.parse(response.body, symbolize_names: true)
+
+        expect(items_json[:errors]).to be_an(Array)
+        expect(items_json[:errors].first[:title]).to eq("Cannot search by name and price at the same time")
+        expect(items_json[:errors].first[:status]).to eq(400)
+      end
+    end
+
+    describe "can find all items - by min_price" do
+      it "can find all items - by min_price" do
+        item_1 = create(:item, unit_price: 10.99)
+        item_2 = create(:item, unit_price: 20.99)
+        item_3 = create(:item, unit_price: 30.99)
+        item_4 = create(:item, unit_price: 40.99)
+
+        get "/api/v1/items/find_all?min_price=20"
+
+        expect(response).to be_successful
+        expect(response.status).to eq(200)
+
+        items_json = JSON.parse(response.body, symbolize_names: true)[:data]
+
+        expect(items_json).to be_an(Array)
+        expect(items_json.count).to eq(3)
+
+        expect(items_json[0][:attributes][:unit_price]).to eq(item_2.unit_price)
+        expect(items_json[1][:attributes][:unit_price]).to eq(item_3.unit_price)
+        expect(items_json[2][:attributes][:unit_price]).to eq(item_4.unit_price)
+      end
+      
+      it "(sad) - min_price can't be less than 0" do
+        get "/api/v1/items/find_all?min_price=-20"
+
+        expect(response).to_not be_successful
+        expect(response.status).to eq(400)
+
+        items_json = JSON.parse(response.body, symbolize_names: true)
+
+        expect(items_json[:errors]).to be_an(Array)
+        expect(items_json[:errors].first[:title]).to eq("Price cannot be less than 0")
+        expect(items_json[:errors].first[:status]).to eq(400)
+      end
+    end
+
+    describe "can find all items - by max_price" do
+      it "can find all items - by max_price" do
+        item_1 = create(:item, unit_price: 10.99)
+        item_2 = create(:item, unit_price: 20.99)
+        item_3 = create(:item, unit_price: 30.99)
+        item_4 = create(:item, unit_price: 40.99)
+
+        get "/api/v1/items/find_all?max_price=30.99"
+
+        expect(response).to be_successful
+        expect(response.status).to eq(200)
+
+        items_json = JSON.parse(response.body, symbolize_names: true)[:data]
+
+        expect(items_json).to be_an(Array)
+        expect(items_json.count).to eq(3)
+
+        expect(items_json[0][:attributes][:unit_price]).to eq(item_1.unit_price)
+        expect(items_json[1][:attributes][:unit_price]).to eq(item_2.unit_price)
+        expect(items_json[2][:attributes][:unit_price]).to eq(item_3.unit_price)
+      end
+
+      it "(sad) - max_price can't be less than 0" do
+        get "/api/v1/items/find_all?max_price=-20"
+
+        expect(response).to_not be_successful
+        expect(response.status).to eq(400)
+
+        items_json = JSON.parse(response.body, symbolize_names: true)
+
+        expect(items_json[:errors]).to be_an(Array)
+        expect(items_json[:errors].first[:title]).to eq("Price cannot be less than 0")
+        expect(items_json[:errors].first[:status]).to eq(400)
+      end
+    end
+
+    describe "can find all items - by price range" do
+      it "can find all items - by min_price and max_price" do
+        item_1 = create(:item, unit_price: 10.99)
+        item_2 = create(:item, unit_price: 20.99)
+        item_3 = create(:item, unit_price: 30.99)
+        item_4 = create(:item, unit_price: 40.99)
+
+        get "/api/v1/items/find_all?min_price=20&max_price=40"
+
+        expect(response).to be_successful
+        expect(response.status).to eq(200)
+
+        items_json = JSON.parse(response.body, symbolize_names: true)[:data]
+
+        expect(items_json).to be_an(Array)
+        expect(items_json.count).to eq(2)
+
+        expect(items_json[0][:attributes][:unit_price]).to eq(item_2.unit_price)
+        expect(items_json[1][:attributes][:unit_price]).to eq(item_3.unit_price)
+      end
+
+      it "(sad) - min_price can't be greater than max_price" do
+        get "/api/v1/items/find_all?min_price=40&max_price=20"
+
+        expect(response).to_not be_successful
+        expect(response.status).to eq(400)
+
+        items_json = JSON.parse(response.body, symbolize_names: true)
+
+        expect(items_json[:errors]).to be_an(Array)
+        expect(items_json[:errors].first[:title]).to eq("Minimum price cannot be greater than maximum price")
+        expect(items_json[:errors].first[:status]).to eq(400)
+      end
     end
   end
 end
