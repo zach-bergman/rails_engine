@@ -25,6 +25,9 @@ describe Item, type: :model do
         expect(Item.find_all_by_name("shirt")).to eq([item_1, item_2])
         expect(Item.find_all_by_name("pants")).to eq([item_3, item_4])
         expect(Item.find_all_by_name("water")).to eq([item_6, item_7])
+
+        expect(Item.find_all_by_name("shirt")).to_not include(item_3)
+        expect(Item.find_all_by_name("car")).to eq([])
       end
     end
 
@@ -66,6 +69,7 @@ describe Item, type: :model do
         expect(Item.find_all_by_price_range(10.99, 14.99)).to eq([item_1, item_2, item_3])
         expect(Item.find_all_by_price_range(12.99, 16.99)).to eq([item_2, item_3, item_4])
         expect(Item.find_all_by_price_range(14.99, 16.99)).to eq([item_3, item_4])
+        expect(Item.find_all_by_price_range(18.99, 21.99)).to eq([])
       end
     end
   end

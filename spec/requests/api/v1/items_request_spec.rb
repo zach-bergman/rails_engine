@@ -76,6 +76,19 @@ describe "Items API" do
       expect(item[:attributes]).to have_key(:merchant_id)
       expect(item[:attributes][:merchant_id]).to be_an(Integer)
     end
+
+    it "(sad) - returns a 404 if the item does not exist" do
+      get "/api/v1/items/1"
+
+      expect(response).to_not be_successful
+      expect(response.status).to eq(404)
+
+      items_json = JSON.parse(response.body, symbolize_names: true)
+
+      expect(items_json[:errors]).to be_a(Array)
+      expect(items_json[:errors].first[:title]).to eq("Couldn't find Item with 'id'=1")
+      expect(items_json[:errors].first[:status]).to eq(404)
+    end
   end
 
   describe "create item /api/v1/items" do
