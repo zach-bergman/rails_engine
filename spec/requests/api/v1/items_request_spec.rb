@@ -268,7 +268,7 @@ describe "Items API" do
       item_4 = create(:item, name: "Black Pants")
 
       get "/api/v1/items/find_all?name=shirt"
-      
+
       expect(response).to be_successful
       expect(response.status).to eq(200)
 
@@ -279,6 +279,48 @@ describe "Items API" do
 
       expect(items_json[0][:attributes][:name]).to eq(item_1.name)
       expect(items_json[1][:attributes][:name]).to eq(item_2.name)
+    end
+
+    it "can find all items - by min_price" do
+      item_1 = create(:item, unit_price: 10.99)
+      item_2 = create(:item, unit_price: 20.99)
+      item_3 = create(:item, unit_price: 30.99)
+      item_4 = create(:item, unit_price: 40.99)
+
+      get "/api/v1/items/find_all?min_price=20"
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      items_json = JSON.parse(response.body, symbolize_names: true)[:data]
+
+      expect(items_json).to be_an(Array)
+      expect(items_json.count).to eq(3)
+
+      expect(items_json[0][:attributes][:unit_price]).to eq(item_2.unit_price)
+      expect(items_json[1][:attributes][:unit_price]).to eq(item_3.unit_price)
+      expect(items_json[2][:attributes][:unit_price]).to eq(item_4.unit_price)
+    end
+
+    it "can find all items - by max_price" do
+      item_1 = create(:item, unit_price: 10.99)
+      item_2 = create(:item, unit_price: 20.99)
+      item_3 = create(:item, unit_price: 30.99)
+      item_4 = create(:item, unit_price: 40.99)
+
+      get "/api/v1/items/find_all?max_price=30.99"
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      items_json = JSON.parse(response.body, symbolize_names: true)[:data]
+
+      expect(items_json).to be_an(Array)
+      expect(items_json.count).to eq(3)
+
+      expect(items_json[0][:attributes][:unit_price]).to eq(item_1.unit_price)
+      expect(items_json[1][:attributes][:unit_price]).to eq(item_2.unit_price)
+      expect(items_json[2][:attributes][:unit_price]).to eq(item_3.unit_price)
     end
   end
 end

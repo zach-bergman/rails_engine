@@ -14,7 +14,6 @@ describe Item, type: :model do
   describe "class methods" do
     describe ".find_all_by_name" do
       it "returns all items with a name that contains the search term" do
-        merchant = create(:merchant)
         item_1 = create(:item, name: "Red Shirt")
         item_2 = create(:item, name: "White Shirt")
         item_3 = create(:item, name: "Grey Pants")
@@ -26,6 +25,34 @@ describe Item, type: :model do
         expect(Item.find_all_by_name("shirt")).to eq([item_1, item_2])
         expect(Item.find_all_by_name("pants")).to eq([item_3, item_4])
         expect(Item.find_all_by_name("water")).to eq([item_6, item_7])
+      end
+    end
+
+    describe ".find_all_by_min_price" do
+      it "returns all items with a unit price greater than or equal to the search term" do
+        item_1 = create(:item, unit_price: 10.99)
+        item_2 = create(:item, unit_price: 12.99)
+        item_3 = create(:item, unit_price: 14.99)
+        item_4 = create(:item, unit_price: 16.99)
+
+        expect(Item.find_all_by_min_price(12.99)).to eq([item_2, item_3, item_4])
+        expect(Item.find_all_by_min_price(14.99)).to eq([item_3, item_4])
+        expect(Item.find_all_by_min_price(16.99)).to eq([item_4])
+        expect(Item.find_all_by_min_price(17.99)).to eq([])
+      end
+    end
+
+    describe ".find_all_by_max_price" do
+      it "returns all items with a unit price less than or equal to the search term" do
+        item_1 = create(:item, unit_price: 10.99)
+        item_2 = create(:item, unit_price: 12.99)
+        item_3 = create(:item, unit_price: 14.99)
+        item_4 = create(:item, unit_price: 16.99)
+
+        expect(Item.find_all_by_max_price(12.99)).to eq([item_1, item_2])
+        expect(Item.find_all_by_max_price(14.99)).to eq([item_1, item_2, item_3])
+        expect(Item.find_all_by_max_price(16.99)).to eq([item_1, item_2, item_3, item_4])
+        expect(Item.find_all_by_max_price(1.00)).to eq([])
       end
     end
   end
