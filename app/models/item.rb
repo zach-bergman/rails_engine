@@ -17,4 +17,8 @@ class Item < ApplicationRecord
   def self.find_all_by_max_price(max_price)
     where('unit_price <= ?', max_price)
   end
+
+  def self.find_all_by_price_range(min_price, max_price)
+    where('unit_price BETWEEN ? AND ?', min_price, max_price)
+  end
 end

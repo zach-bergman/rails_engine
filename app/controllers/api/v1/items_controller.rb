@@ -1,6 +1,4 @@
 class Api::V1::ItemsController < ApplicationController
-  rescue_from ActiveRecord::RecordInvalid, with: :missing_attributes
-  rescue_from ActiveRecord::RecordNotFound, with: :not_found
   def index
     render json: ItemSerializer.new(Item.all)
   end
@@ -26,13 +24,5 @@ class Api::V1::ItemsController < ApplicationController
   private
   def item_params
     params.require(:item).permit(:name, :description, :unit_price, :merchant_id)
-  end
-
-  def missing_attributes(execution)
-    render json: ErrorSerializer.new(ErrorMessage.new(execution.message, 400)).serialize_json, status: 400
-  end
-
-  def not_found(execution)
-    render json: ErrorSerializer.new(ErrorMessage.new(execution.message, 404)).serialize_json, status: 404
   end
 end
