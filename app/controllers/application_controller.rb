@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
     render json: ErrorSerializer.new(ErrorMessage.new(exception.message, 404))
     .serialize_json, status: 404
   end
-
+  
   def missing_attributes(execution)
     render json: ErrorSerializer.new(ErrorMessage.new(execution.message, 400)).serialize_json, status: 400
   end

@@ -8,7 +8,7 @@ class Api::V1::MerchantsFindController < ApplicationController
         render json: { data: {} }, status: :not_found
       end
     else
-      render json: { error: 'Name parameter is required' }, status: :bad_request
+      render json: ErrorSerializer.new(ErrorMessage.new('Name parameter is required', 400)).serialize_json, status: 400
     end
   end
 end
