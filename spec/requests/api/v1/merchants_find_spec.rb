@@ -10,7 +10,6 @@ RSpec.describe "Merchants Find API" do
 
       get "/api/v1/merchants/find?name=back"
 
-      # require 'pry' ; binding.pry
       expect(response).to be_successful
       expect(response.status).to eq(200)
       
@@ -30,6 +29,18 @@ RSpec.describe "Merchants Find API" do
       expect(data).to have_key(:data)
       expect(data[:data]).to be_a(Hash)
       expect(data[:data]).to eq({})
+    end
+
+    it "can find a merchant by its name(sad) - name must be entered" do
+      get "/api/v1/merchants/find?name=", headers: headers
+
+      expect(response).not_to be_successful
+      expect(response.status).to eq(400)
+
+      data = JSON.parse(response.body, symbolize_names: true)[:errors].first
+
+      expect(data[:title]).to eq("Name parameter is required")
+      expect(data[:status]).to eq(400)
     end
   end
 end
