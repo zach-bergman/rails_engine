@@ -25,6 +25,19 @@ describe "Merchants API" do
         expect(merchant[:attributes][:name]).to be_a(String)
       end
     end
+
+    it "(sad) - returns an empty array if there are no merchants" do
+      get "/api/v1/merchants"
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      merchants_json = JSON.parse(response.body, symbolize_names: true)
+
+      merchants = merchants_json[:data]
+
+      expect(merchants).to eq([])
+    end
   end
 
   describe "/api/v1/merchants/:id" do

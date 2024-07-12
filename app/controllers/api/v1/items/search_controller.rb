@@ -1,40 +1,23 @@
 class Api::V1::Items::SearchController < ApplicationController
   def index
-    if search_params[:name] && search_params[:name].empty?
-      error_message = "No name entered"
-      render json: ErrorSerializer.new(ErrorMessage.new(error_message, 400)).serialize_json, status: 400
-
-    elsif search_params[:name] && (search_params[:min_price] || search_params[:max_price])
-      error_message = "Cannot search by name and price at the same time"
-      render json: ErrorSerializer.new(ErrorMessage.new(error_message, 400)).serialize_json, status: 400
-
+    if invalid_name_search?
+      render_error("No name entered", 400)
+    elsif conflicting_search_params?
+      render_error("Cannot search by name and price at the same time", 400)
     elsif search_params[:name]
-      items = Item.find_all_by_name(search_params[:name])
-      render json: ItemSerializer.new(items)
-
-    elsif search_params[:min_price].to_i < 0 || search_params[:max_price].to_i < 0
-      error_message = "Price cannot be less than 0"
-      render json: ErrorSerializer.new(ErrorMessage.new(error_message, 400)).serialize_json, status: 400
-
-    elsif search_params[:min_price] && search_params[:max_price] && search_params[:min_price] > search_params[:max_price]
-      error_message = "Minimum price cannot be greater than maximum price"
-      render json: ErrorSerializer.new(ErrorMessage.new(error_message, 400)).serialize_json, status: 400
-
+      render_items(Item.find_all_by_name(search_params[:name]))
+    elsif invalid_price_range?
+      render_error("Price cannot be less than 0", 400)
+    elsif min_price_greater_than_max?
+      render_error("Minimum price cannot be greater than maximum price", 400)
     elsif search_params[:min_price] && search_params[:max_price]
-      items = Item.find_all_by_price_range(search_params[:min_price], search_params[:max_price])
-      render json: ItemSerializer.new(items)
-
+      render_items(Item.find_all_by_price_range(search_params[:min_price], search_params[:max_price]))
     elsif search_params[:min_price]
-      items = Item.find_all_by_min_price(search_params[:min_price])
-      render json: ItemSerializer.new(items)
-
+      render_items(Item.find_all_by_min_price(search_params[:min_price]))
     elsif search_params[:max_price]
-      items = Item.find_all_by_max_price(search_params[:max_price])
-      render json: ItemSerializer.new(items)
-
+      render_items(Item.find_all_by_max_price(search_params[:max_price]))
     else 
-      error_message = "No search parameters entered"
-      render json: ErrorSerializer.new(ErrorMessage.new(error_message, 400)).serialize_json, status: 400
+      render_error("No search parameters entered", 400)
     end
   end
 
@@ -43,5 +26,29 @@ class Api::V1::Items::SearchController < ApplicationController
   def search_params
     params.permit(:id, :name, :description, :unit_price, :merchant_id, :created_at, 
     :updated_at, :min_price, :max_price)
+  end
+
+  def render_error(message, status)
+    render json: ErrorSerializer.new(ErrorMessage.new(message, status)).serialize_json, status: status
+  end
+
+  def render_items(items)
+    render json: ItemSerializer.new(items)
+  end
+
+  def invalid_name_search?
+    search_params[:name] && search_params[:name].empty?
+  end
+
+  def conflicting_search_params?
+    search_params[:name] && (search_params[:min_price] || search_params[:max_price])
+  end
+
+  def invalid_price_range?
+    search_params[:min_price].to_i < 0 || search_params[:max_price].to_i < 0
+  end
+
+  def min_price_greater_than_max?
+    search_params[:min_price] && search_params[:max_price] && search_params[:min_price] > search_params[:max_price]
   end
 end

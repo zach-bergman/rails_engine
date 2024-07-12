@@ -40,6 +40,19 @@ describe "Items API" do
         expect(item[:attributes][:merchant_id]).to be_a(Integer)
       end
     end
+
+    it "(sad) - returns an empty array if there are no items" do
+      get "/api/v1/items"
+
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+
+      items_json = JSON.parse(response.body, symbolize_names: true)
+
+      items = items_json[:data]
+
+      expect(items).to eq([])
+    end
   end
 
   describe "/api/v1/items/:id" do
